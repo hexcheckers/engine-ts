@@ -1,0 +1,56 @@
+{
+  "name": "@br42/hc-engine",
+  "version": "0.1.0",
+  "description": "HexCheckers game engine",
+  "type": "module",
+  "engines": {
+    "node": ">= 18.8"
+  },
+  "devDependencies": {
+    "@types/jest": "~29.2",
+    "@types/node": "~18",
+    "@typescript-eslint/eslint-plugin": "~5.44",
+    "@typescript-eslint/parser": "~5.44",
+    "eslint": "~8.28",
+    "eslint-config-prettier": "~8.5",
+    "eslint-plugin-jest": "~27.1",
+    "jest": "~29.3",
+    "prettier": "~2.8",
+    "rimraf": "~3.0",
+    "ts-jest": "~29.0",
+    "tsutils": "~3.21",
+    "typescript": "~5.0"
+  },
+  "dependencies": {
+    "tslib": "~2.4"
+  },
+  "scripts": {
+    "clean": "rimraf coverage build tmp",
+    "prebuild": "npm run lint",
+    "build": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -p tsconfig.json",
+    "build:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -w -p tsconfig.json",
+    "build:release": "export TS_JEST_DISABLE_VER_CHECKER=true && npm run clean && tsc -p tsconfig.release.json",
+    "lint": "export TS_JEST_DISABLE_VER_CHECKER=true && eslint . --ext .ts --ext .mts",
+    "test": "export TS_JEST_DISABLE_VER_CHECKER=true && jest",
+    "coverage": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --coverage",
+    "prettier": "prettier --config .prettierrc --write .",
+    "test:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hexcheckers/engine-ts.git"
+  },
+  "keywords": [
+    "HexCheckers",
+    "Hexagonal",
+    "Checkers",
+    "Checkers",
+    "Game"
+  ],
+  "author": "Alexander Belousov <brevis.ua@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hexcheckers/engine-ts/issues"
+  },
+  "homepage": "https://github.com/hexcheckers/engine-ts#readme"
+}
