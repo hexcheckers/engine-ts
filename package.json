@@ -1,8 +1,15 @@
 {
   "name": "@br42/hc-engine",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "HexCheckers game engine",
   "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.ts",
+    "dist/index.d.ts"
+  ],
   "engines": {
     "node": ">= 18.8"
   },
@@ -25,7 +32,7 @@
     "tslib": "~2.4"
   },
   "scripts": {
-    "clean": "rimraf coverage build tmp",
+    "clean": "rimraf coverage build dist tmp",
     "prebuild": "npm run lint",
     "build": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -p tsconfig.json",
     "build:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -w -p tsconfig.json",
@@ -33,6 +40,7 @@
     "lint": "export TS_JEST_DISABLE_VER_CHECKER=true && eslint . --ext .ts --ext .mts",
     "test": "export TS_JEST_DISABLE_VER_CHECKER=true && jest",
     "coverage": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --coverage",
+    "publish": "npm publish --access public",
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --watch"
   },
