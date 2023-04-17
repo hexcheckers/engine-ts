@@ -40,7 +40,7 @@
     "lint": "export TS_JEST_DISABLE_VER_CHECKER=true && npm run clean && eslint . --ext .ts --ext .mts",
     "test": "export TS_JEST_DISABLE_VER_CHECKER=true && jest",
     "coverage": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --coverage",
-    "publish": "npm publish --access public",
+    "publish": "npm run build:release && npm publish --access public",
     "prettier": "prettier --config .prettierrc --write .",
     "test:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --watch"
   },
