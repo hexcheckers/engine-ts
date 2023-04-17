@@ -1,13 +1,12 @@
 {
   "name": "@br42/hc-engine",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "HexCheckers game engine",
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "files": [
     "dist/**/*.js",
-    "dist/**/*.ts",
     "dist/index.d.ts"
   ],
   "engines": {
