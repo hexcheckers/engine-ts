@@ -1,5 +1,5 @@
-import Board, {assignMovesToBoard, assignMoveToBoard, isBoardInInitialPosition} from "./Board.js";
-import {Color, getInvertedColor} from "./Piece.js";
+import Board from "./Board.js";
+import Piece, {Color} from "./Piece.js";
 import Move from "./Move.js";
 import State from "./State.js";
 
@@ -28,23 +28,22 @@ export default class Ai {
 
         const bestMoves: Move[] = this.getPrecalculatedMoves(virtualBoard, color);
         if (bestMoves.length > 0) {
-            return assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board);
+            return Board.assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board);
         }
 
         const moves: Move[] = virtualBoard.getAvailableMovesForColor(color);
         if (moves.length === 0) {
             return null;
         } else if (moves.length === 1) {
-            return assignMoveToBoard(moves[0], this.board);
+            return Board.assignMoveToBoard(moves[0], this.board);
         }
 
         const partSize = Math.max(1, Math.ceil(moves.length / THREAD_COUNT));
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const moveParts = [...Array(Math.ceil(moves.length / partSize))].map(_ => moves.splice(0, partSize));
+        const moveParts = [...Array(Math.ceil(moves.length / partSize))].map(() => moves.splice(0, partSize));
         const virtualBoards: Board[] = [];
         for (let i = 0; i < moveParts.length; i++) {
             virtualBoards.push(virtualBoard.copy());
-            assignMovesToBoard(moveParts[i], virtualBoards[i]);
+            Board.assignMovesToBoard(moveParts[i], virtualBoards[i]);
         }
 
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -68,16 +67,15 @@ export default class Ai {
             }
         }
 
-        return assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board);
+        return Board.assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board);
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    public interrupt() {
+    public interrupt(): void {
         this.interrupted = true;
     }
 
     private getPrecalculatedMoves(board: Board, color: Color): Move[] {
-        if (isBoardInInitialPosition(board)) {
+        if (Board.isBoardInInitialPosition(board)) {
             return board.getAvailableMovesForColor(color);
         }
         return [];
@@ -126,7 +124,7 @@ export default class Ai {
             return this.calculateBoardScoreV2(startBoardState, State.build(board), color);
         }
 
-        const otherPieceColor = getInvertedColor(color);
+        const otherPieceColor = Piece.getInvertedColor(color);
         const isMaximizingPlayer = depth % 2 === 0;
         let tmpAlpha = alpha;
         let tmpBeta = beta;
@@ -173,7 +171,7 @@ export default class Ai {
             return this.calculateBoardScoreV2(startBoardState, State.build(board), color);
         }
 
-        const otherPieceColor = getInvertedColor(color);
+        const otherPieceColor = Piece.getInvertedColor(color);
         const isMaximizingPlayer = depth % 2 === 0;
         let tmpAlpha = alpha;
         let tmpBeta = beta;
@@ -210,15 +208,13 @@ export default class Ai {
     }
 
     private calculateBoardScoreV2(startBoardState: State, boardState: State, color: Color): number {
-        const menCost = 100;
-        const selfKingCost = menCost * 2;
-        const foreignKingCost = menCost * 2;
-        let efficiency = 0;
-        let blackEfficiency = 0;
-        let whiteEfficiency = 0;
+        const menCost = 100, selfKingCost = menCost * 2, foreignKingCost = menCost * 2;
+        let efficiency: number;
+        let blackEfficiency: number;
+        let whiteEfficiency: number;
 
-        let playerCapturedMoves = 0;
-        let otherPlayerCapturedMoves = 0;
+        let playerCapturedMoves: number;
+        let otherPlayerCapturedMoves: number;
 
         if (color === Color.A) {
             blackEfficiency = boardState.menCountB * menCost + boardState.kingCountB * foreignKingCost;

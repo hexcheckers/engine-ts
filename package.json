@@ -1,6 +1,6 @@
 {
   "name": "@br42/hc-engine",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "HexCheckers game engine",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -37,7 +37,7 @@
     "build": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -p tsconfig.json",
     "build:watch": "export TS_JEST_DISABLE_VER_CHECKER=true && tsc -w -p tsconfig.json",
     "build:release": "export TS_JEST_DISABLE_VER_CHECKER=true && npm run clean && tsc -p tsconfig.release.json",
-    "lint": "export TS_JEST_DISABLE_VER_CHECKER=true && eslint . --ext .ts --ext .mts",
+    "lint": "export TS_JEST_DISABLE_VER_CHECKER=true && npm run clean && eslint . --ext .ts --ext .mts",
     "test": "export TS_JEST_DISABLE_VER_CHECKER=true && jest",
     "coverage": "export TS_JEST_DISABLE_VER_CHECKER=true && jest --coverage",
     "publish": "npm publish --access public",

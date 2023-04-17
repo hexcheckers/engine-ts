@@ -1,11 +1,5 @@
 import Cell from "./Cell.js";
-import Board, {
-    assignMovesToBoard,
-    findTwinPieceOnBoard,
-    getAllMoveDirections,
-    getBottomMoveDirections, getInvertedDirection,
-    getTopMoveDirections
-} from "./Board.js";
+import Board from "./Board.js";
 import Move, {Direction} from "./Move.js";
 
 export enum Color {
@@ -50,43 +44,43 @@ export default class Piece {
 
     public getAvailableRegularMoves(): Move[] {
         const virtualBoard = this.cell.board.copy();
-        const piece = findTwinPieceOnBoard(this, virtualBoard);
+        const piece = Board.findTwinPieceOnBoard(this, virtualBoard);
         const moves: Move[] = this.isKing ? getAvailableRegularKingMoves(piece) : getAvailableRegularMenMoves(piece);
-        return assignMovesToBoard(moves, this.cell.board);
+        return Board.assignMovesToBoard(moves, this.cell.board);
     }
 
     public getAvailableCaptureMoves(): Move[] {
         const virtualBoard = this.cell.board.copy();
-        const piece = findTwinPieceOnBoard(this, virtualBoard);
+        const piece = Board.findTwinPieceOnBoard(this, virtualBoard);
         const moves: Move[] = this.isKing ? getAvailableCaptureKingMoves(piece) : getAvailableCaptureMenMoves(piece);
-        return assignMovesToBoard(moves, this.cell.board);
+        return Board.assignMovesToBoard(moves, this.cell.board);
+    }
+
+    public static getInvertedColor(color: Color): Color {
+        return color === Color.A ? Color.B : Color.A;
     }
 }
 
-export const getInvertedColor = (color: Color): Color => {
-    return color === Color.A ? Color.B : Color.A;
-};
-
 const getAvailableRegularMenMoves = (piece: Piece): Move[] => {
     const moves: Move[] = [];
-    const directions: Direction[] = piece.color === Color.A ? getTopMoveDirections() : getBottomMoveDirections();
+    const directions: Direction[] = piece.color === Color.A ? Board.getTopMoveDirections() : Board.getBottomMoveDirections();
     directions.forEach(direction => {
         if (piece.cell.board.isCellExistsAndEmpty(piece.cell.getSiblingCell(direction))) {
             moves.push(new Move(piece.cell, piece.cell.getSiblingCell(direction)));
         }
     });
-    return moves
+    return moves;
 };
 
 const getAvailableRegularKingMoves = (piece: Piece): Move[] => {
     const moves: Move[] = [];
-    getAllMoveDirections().forEach(direction => {
+    for (const direction of Board.getAllMoveDirections()) {
         let tmp = piece.cell;
         while (piece.cell.board.isCellExistsAndEmpty(tmp.getSiblingCell(direction))) {
             moves.push(new Move(piece.cell, tmp.getSiblingCell(direction)));
             tmp = tmp.getSiblingCell(direction);
         }
-    });
+    }
     return moves;
 };
 
@@ -116,12 +110,12 @@ const buildAvailableCaptureMenMoves = (piece: Piece, queue: Map<string, Move>, c
     const cell: Cell = parentMove?.dstCell || piece.cell;
     let move: Move|null = null;
 
-    for (const direction of getAllMoveDirections()) {
+    for (const direction of Board.getAllMoveDirections()) {
         const siblingCell = cell.getSiblingCell(direction);
         const targetCell = siblingCell?.getSiblingCell(direction);
         if (siblingCell && targetCell && !siblingCell.isEmpty() && targetCell.isEmpty()
             && siblingCell.piece?.color != piece.color
-            && (!parentMove || parentMove.direction != getInvertedDirection(direction))
+            && (!parentMove || parentMove.direction !== Board.getInvertedDirection(direction))
             && !capturedPieces.has(siblingCell.piece.toString())
         ) {
             move = new Move(cell, targetCell, siblingCell.piece, parentMove?.copy());
@@ -165,8 +159,8 @@ const buildAvailableCaptureKingMoves = (piece: Piece, queue: Map<string, Move>, 
     let emptyCell: Cell|null = null;
     let move: Move|null = null;
 
-    for (const direction of getAllMoveDirections()) {
-        if (!parentMove || parentMove.direction !== getInvertedDirection(direction)) {
+    for (const direction of Board.getAllMoveDirections()) {
+        if (!parentMove || parentMove.direction !== Board.getInvertedDirection(direction)) {
             enemyPieceCell = cell.getSiblingCell(direction);
             while (enemyPieceCell && enemyPieceCell.isEmpty()) {
                 enemyPieceCell = enemyPieceCell.getSiblingCell(direction);

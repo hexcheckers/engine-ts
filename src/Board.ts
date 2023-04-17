@@ -66,14 +66,14 @@ export default class Board {
                 buffer += "       ___     ___     ___     ___\n";
                 buffer += `   ___/ ${this.getColoredPieceSignInCellId(cellsNumber - 6)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber - 4)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber - 2)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber)} \\\n`;
                 currentCell = cellsNumber - 7;
-            break;
+                break;
 
             case 10:
             default:
                 buffer += "       ___     ___     ___     ___     ___\n";
                 buffer += `   ___/ ${this.getColoredPieceSignInCellId(cellsNumber - 8)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber - 6)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber - 4)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber - 2)} \\___/ ${this.getColoredPieceSignInCellId(cellsNumber)} \\\n`;
                 currentCell = cellsNumber - 9
-            break;
+                break;
         }
 
         for (let i = 1; i <= boardHeight; i++) {
@@ -107,19 +107,19 @@ export default class Board {
             case 8:
                 buffer += "  \\___/   \\___/   \\___/   \\___/\n";
                 buffer += "    a   b   c   d   e   f   g   h";
-            break;
+                break;
 
             case 10:
             default:
                 buffer += "  \\___/   \\___/   \\___/   \\___/   \\___/\n";
                 buffer += "    a   b   c   d   e   f   g   h   i   j";
-            break;
+                break;
         }
 
         return buffer;
     }
 
-    public isCellExists(cell: Cell|string): boolean {
+    public isCellExists(cell: Cell | string): boolean {
         if (cell instanceof Cell) {
             return this.cells.has(cell.name);
         } else {
@@ -127,7 +127,7 @@ export default class Board {
         }
     }
 
-    public isCellExistsAndEmpty(cell: Cell|string|null): boolean {
+    public isCellExistsAndEmpty(cell: Cell | string | null): boolean {
         if (cell === null) {
             return false;
         }
@@ -135,7 +135,7 @@ export default class Board {
     }
 
     public getPieceSignInCellId(cellId: number): string {
-        const piece: Piece|null = this.getPieceInCell(this.getCellByPosition(cellId));
+        const piece: Piece | null = this.getPieceInCell(this.getCellByPosition(cellId));
         return piece ? piece.getSign() : " ";
     }
 
@@ -153,7 +153,7 @@ export default class Board {
         }
     }
 
-    public getPieceInCell(cell: Cell|string): Piece|null {
+    public getPieceInCell(cell: Cell | string): Piece | null {
         if (cell instanceof Cell) {
             return cell.piece ?? null;
         } else {
@@ -171,7 +171,7 @@ export default class Board {
         return this.createPieceInCell(this.cells.get(cellName), color, isKing);
     }
 
-    public addPiece(cell: Cell|string, color: Color, isKing = false): Piece {
+    public addPiece(cell: Cell | string, color: Color, isKing = false): Piece {
         if (cell instanceof Cell) {
             return this.createPieceInCell(cell, color, isKing);
         } else {
@@ -191,11 +191,11 @@ export default class Board {
 
     public clear(): void {
         this.cells.forEach(cell => {
-           cell.clear();
+            cell.clear();
         });
     }
 
-    public isCellEmpty(cell: Cell|string): boolean {
+    public isCellEmpty(cell: Cell | string): boolean {
         if (cell instanceof Cell) {
             return cell.isEmpty();
         } else {
@@ -204,7 +204,7 @@ export default class Board {
         }
     }
 
-    public isValidMove(move: Move|string, color: Color|null = null): boolean {
+    public isValidMove(move: Move | string, color: Color | null = null): boolean {
         if (move instanceof Move) {
             return this.isValidMoveByMove(move, color);
         } else {
@@ -212,7 +212,7 @@ export default class Board {
         }
     }
 
-    private isValidMoveByMove(move: Move, color: Color|null = null): boolean {
+    private isValidMoveByMove(move: Move, color: Color | null = null): boolean {
         const availableMoves = color === null ? this.getAvailableMoves() : this.getAvailableMovesForColor(color);
         for (const m of availableMoves) {
             if (m.toString() === move.toString()) {
@@ -222,7 +222,7 @@ export default class Board {
         return false;
     }
 
-    private isValidMoveByString(moveString: string, color: Color|null = null): boolean {
+    private isValidMoveByString(moveString: string, color: Color | null = null): boolean {
         if (!Move.isMoveStringRepresentationValid(moveString)) {
             return false;
         }
@@ -273,7 +273,7 @@ export default class Board {
         if (!this.isValidMove(move)) {
             throw new Error(`Incorrect move "${move}".`);
         }
-        let tmpMove: Move|null = move.root();
+        let tmpMove: Move | null = move.root();
         while (tmpMove != null) {
             this.executeOneMove(tmpMove)
             tmpMove = tmpMove.next;
@@ -300,7 +300,7 @@ export default class Board {
      * Rollback full move (all parts, from end to root)
      */
     public rollbackMove(move: Move): void {
-        let tmpMove: Move|null = move.end();
+        let tmpMove: Move | null = move.end();
         while (tmpMove != null) {
             this.rollbackOneMove(tmpMove);
             tmpMove = tmpMove.previous;
@@ -308,7 +308,7 @@ export default class Board {
     }
 
     public removeCapturedPieces(move: Move): void {
-        let currentMove: Move|null = move;
+        let currentMove: Move | null = move;
         while (currentMove !== null) {
             if (currentMove.capturePiece !== null) {
                 currentMove.capturePiece.removeFromBoard();
@@ -383,7 +383,7 @@ export default class Board {
         const colsNumber: number = Board.getBoardColsNumber(this.size);
         const positions: Map<number, string> = new Map<number, string>();
         positions.set(0, "00"); // hack to avoid -1 when access
-        let letterIndex  = 0;
+        let letterIndex = 0;
         let number = 1;
         for (let i = 1; i <= Board.getBoardCellsNumber(this.size); i++) {
             positions.set(i, Board.letters[letterIndex] + number);
@@ -464,7 +464,7 @@ export default class Board {
         }
     }
 
-    private getCellByPosition(position: number): Cell|null {
+    private getCellByPosition(position: number): Cell | null {
         return this.cells.get(this.positions.get(position)) || null;
     }
 
@@ -591,14 +591,98 @@ export default class Board {
         return !!stringRepresentation.match(regex);
     }
 
-    private static getBoardSizeFromHcFen(stringRepresentation: string): Size|null {
+    public static getAllMoveDirections(): Direction[] {
+        return Board.getTopMoveDirections().concat(Board.getBottomMoveDirections());
+    };
+
+    public static getTopMoveDirections(): Direction[] {
+        return [Direction.TOP_LEFT, Direction.TOP_MIDDLE, Direction.TOP_RIGHT];
+    }
+
+    public static getBottomMoveDirections(): Direction[] {
+        return [Direction.BOTTOM_LEFT, Direction.BOTTOM_MIDDLE, Direction.BOTTOM_RIGHT];
+    }
+
+    public static getInvertedDirection(direction: Direction): Direction {
+        switch (direction) {
+            case Direction.TOP_LEFT:
+                return Direction.BOTTOM_RIGHT;
+            case Direction.TOP_MIDDLE:
+                return Direction.BOTTOM_MIDDLE;
+            case Direction.TOP_RIGHT:
+                return Direction.BOTTOM_LEFT;
+            case Direction.BOTTOM_LEFT:
+                return Direction.TOP_RIGHT;
+            case Direction.BOTTOM_MIDDLE:
+                return Direction.TOP_MIDDLE;
+            case Direction.BOTTOM_RIGHT:
+                return Direction.TOP_LEFT;
+        }
+    }
+
+    public static findTwinCellOnBoard(targetCell: Cell, board: Board): Cell {
+        for (const cell of board.cells.values()) {
+            if (targetCell.name === cell.name) {
+                return cell;
+            }
+        }
+        throw new Error(`Twin cell "${targetCell}" not found on target board.`);
+    }
+
+    public static findTwinPieceOnBoard(targetPiece: Piece, board: Board): Piece {
+        for (const cell of board.cells.values()) {
+            if (!cell.isEmpty() && targetPiece.cell.name === cell.name) {
+                return cell.piece;
+            }
+        }
+        throw new Error(`Twin piece "${targetPiece}" not found on target board.`);
+    }
+
+    public static assignMoveToBoard(move: Move, board: Board): Move {
+        if (!move) {
+            return move;
+        }
+        let tmpMove: Move | null = move.root();
+        while (tmpMove !== null) {
+            tmpMove.srcCell = Board.findTwinCellOnBoard(tmpMove.srcCell, board);
+            tmpMove.piece = tmpMove.srcCell.piece;
+            tmpMove.dstCell = Board.findTwinCellOnBoard(tmpMove.dstCell, board);
+            if (tmpMove.capturePiece) {
+                tmpMove.capturePiece = Board.findTwinPieceOnBoard(tmpMove.capturePiece, board);
+            }
+            tmpMove = tmpMove.next;
+        }
+        return move;
+    }
+
+    public static assignMovesToBoard(moves: Move[], board: Board): Move[] {
+        for (const move of moves) {
+            Board.assignMoveToBoard(move, board);
+        }
+        return moves;
+    };
+
+    public static isBoardInInitialPosition(board: Board): boolean {
+        const initialBoardPositions = [
+            "6x6/aaaaaa/aaaaaa///bbbbbb/bbbbbb",
+            "6x8/aaaaaa/aaaaaa/aaaaaa///bbbbbb/bbbbbb/bbbbbb",
+            "8x6/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb",
+            "8x8/aaaaaaaa/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb/bbbbbbbb",
+            "8x10/aaaaaaaa/aaaaaaaa/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb/bbbbbbbb/bbbbbbbb",
+            "10x8/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa///bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb",
+            "10x10/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa///bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb",
+        ];
+        return initialBoardPositions.includes(board.toHcFen());
+    };
+
+    private static getBoardSizeFromHcFen(stringRepresentation: string): Size | null {
         let sizeMarkerLength = 3;
         if (stringRepresentation.length < sizeMarkerLength) {
             return null;
         }
 
         let size;
-        switch(stringRepresentation.substring(0, sizeMarkerLength).toString().toLowerCase()) {
+        switch (stringRepresentation.substring(0, sizeMarkerLength).toString().toLowerCase()) {
             case "6x6":
                 size = Size.SIZE_6X6;
                 break;
@@ -660,87 +744,3 @@ export default class Board {
         }
     }
 }
-
-export const getAllMoveDirections = (): Direction[] => {
-    return getTopMoveDirections().concat(getBottomMoveDirections());
-};
-
-export const getTopMoveDirections = (): Direction[] => {
-    return [Direction.TOP_LEFT, Direction.TOP_MIDDLE, Direction.TOP_RIGHT];
-}
-
-export const getBottomMoveDirections = (): Direction[] => {
-    return [Direction.BOTTOM_LEFT, Direction.BOTTOM_MIDDLE, Direction.BOTTOM_RIGHT];
-}
-
-export const getInvertedDirection = (direction: Direction): Direction => {
-    switch (direction) {
-        case Direction.TOP_LEFT:
-            return Direction.BOTTOM_RIGHT;
-        case Direction.TOP_MIDDLE:
-            return Direction.BOTTOM_MIDDLE;
-        case Direction.TOP_RIGHT:
-            return Direction.BOTTOM_LEFT;
-        case Direction.BOTTOM_LEFT:
-            return Direction.TOP_RIGHT;
-        case Direction.BOTTOM_MIDDLE:
-            return Direction.TOP_MIDDLE;
-        case Direction.BOTTOM_RIGHT:
-            return Direction.TOP_LEFT;
-    }
-}
-
-export const findTwinCellOnBoard = (targetCell: Cell, board: Board): Cell => {
-    for (const cell of board.cells.values()) {
-        if (targetCell.name === cell.name) {
-            return cell;
-        }
-    }
-    throw new Error(`Twin cell "${targetCell}" not found on target board.`);
-}
-
-export const findTwinPieceOnBoard = (targetPiece: Piece, board: Board): Piece => {
-    for (const cell of board.cells.values()) {
-        if (!cell.isEmpty() && targetPiece.cell.name === cell.name) {
-            return cell.piece;
-        }
-    }
-    throw new Error(`Twin piece "${targetPiece}" not found on target board.`);
-}
-
-export const assignMoveToBoard = (move: Move, board: Board): Move => {
-    if (!move) {
-        return move;
-    }
-    let tmpMove: Move|null = move.root();
-    while (tmpMove !== null) {
-        tmpMove.srcCell = findTwinCellOnBoard(tmpMove.srcCell, board);
-        tmpMove.piece = tmpMove.srcCell.piece;
-        tmpMove.dstCell = findTwinCellOnBoard(tmpMove.dstCell, board);
-        if (tmpMove.capturePiece) {
-            tmpMove.capturePiece = findTwinPieceOnBoard(tmpMove.capturePiece, board);
-        }
-        tmpMove = tmpMove.next;
-    }
-    return move;
-}
-
-export const assignMovesToBoard = (moves: Move[], board: Board): Move[] => {
-    for (const move of moves) {
-        assignMoveToBoard(move, board);
-    }
-    return moves;
-};
-
-export const isBoardInInitialPosition = (board: Board): boolean => {
-    const initialBoardPositions = [
-        "6x6/aaaaaa/aaaaaa///bbbbbb/bbbbbb",
-        "6x8/aaaaaa/aaaaaa/aaaaaa///bbbbbb/bbbbbb/bbbbbb",
-        "8x6/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb",
-        "8x8/aaaaaaaa/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb/bbbbbbbb",
-        "8x10/aaaaaaaa/aaaaaaaa/aaaaaaaa/aaaaaaaa///bbbbbbbb/bbbbbbbb/bbbbbbbb/bbbbbbbb",
-        "10x8/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa///bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb",
-        "10x10/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa/aaaaaaaaaa///bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb/bbbbbbbbbb",
-    ];
-    return initialBoardPositions.includes(board.toHcFen());
-};
