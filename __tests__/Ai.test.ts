@@ -80,7 +80,7 @@ describe('Testing Ai', () => {
         expect(expectedMoves).toContain(move.toString());
     });
 
-    test('Testing Ai 8', async () => {
+    test('Testing Ai 9', async () => {
         const expectedMoves = ["a6-a5", "a6-b5"];
         const board = Board.makeFromHcFen("6x6/---a-a/-a/a/a//bA");
         const ai = new Ai(board);
