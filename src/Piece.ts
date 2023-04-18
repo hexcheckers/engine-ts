@@ -42,6 +42,14 @@ export default class Piece {
         this.cell.clear();
     }
 
+    public getAvailableMoves(): Move[] {
+        const capturedMoves = this.getAvailableCaptureMoves();
+        if (capturedMoves.length > 0) {
+            return capturedMoves;
+        }
+        return this.getAvailableRegularMoves();
+    }
+
     public getAvailableRegularMoves(): Move[] {
         const virtualBoard = this.cell.board.copy();
         const piece = Board.findTwinPieceOnBoard(this, virtualBoard);

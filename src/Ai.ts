@@ -46,7 +46,7 @@ export default class Ai {
             Board.assignMovesToBoard(moveParts[i], virtualBoards[i]);
         }
 
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         const scores: number[] = await (async () => {
             const promises = [];
             for (let i = 0; i < moveParts.length; i++) {
@@ -67,7 +67,9 @@ export default class Ai {
             }
         }
 
-        return Board.assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board);
+        return new Promise((resolve) => {
+            resolve(Board.assignMoveToBoard(bestMoves[getRandomNumber(0, bestMoves.length - 1)], this.board));
+        });
     }
 
     public interrupt(): void {
@@ -264,10 +266,10 @@ const getRandomNumber = (min, max): number => {
 
 const getMaxValue = (array): number => {
     let max = null;
-    array.forEach(v => {
-        if (max === null || v > max) {
-            max = v;
+    for (const item of array) {
+        if (max === null || item > max) {
+            max = item;
         }
-    });
+    }
     return max;
 }

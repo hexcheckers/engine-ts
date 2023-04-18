@@ -92,6 +92,19 @@ export default class Move {
         return end;
     }
 
+    public atIndex(index: number): Move|null {
+        let move = this.root();
+        let i = 0;
+        do {
+            if (i === index) {
+                return move;
+            }
+            move = move.next;
+            i++;
+        } while (move.hasNext())
+        return null;
+    }
+
     public copy(): Move {
         let currentMove: Move = this.root();
         let copy = this.copyOneMove(currentMove);

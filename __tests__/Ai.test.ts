@@ -69,6 +69,7 @@ describe('Testing Ai', () => {
         board.executeMove(move);
         expect(board.toHcFen()).toBe("6x6///-----A/--b//");
     });
+
     test('Testing Ai 8', async () => {
         const expectedMoves = ["f2-f1", "f4-e4", "f4-f3", "b5-a5", "b5-b4", "b5-c5", "f5-e5"];
         const board = Board.makeFromHcFen("6x6//---a-b/-a-aa/a-a--b/-b---b/");
@@ -79,4 +80,13 @@ describe('Testing Ai', () => {
         expect(expectedMoves).toContain(move.toString());
     });
 
+    test('Testing Ai 8', async () => {
+        const expectedMoves = ["a6-a5", "a6-b5"];
+        const board = Board.makeFromHcFen("6x6/---a-a/-a/a/a//bA");
+        const ai = new Ai(board);
+        const move = await ai.findBestMove(Color.B);
+        expect(move).toBeInstanceOf(Move);
+        board.executeMove(move);
+        expect(expectedMoves).toContain(move.toString());
+    });
 });
